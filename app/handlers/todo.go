@@ -10,3 +10,7 @@ import (
 func ListTodos(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	respondJson(w, http.StatusOK, models.AllTodos(db))
 }
+
+func AddTodo(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	respondJson(w, http.StatusCreated, models.AddTodo(db))
+}

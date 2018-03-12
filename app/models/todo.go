@@ -33,3 +33,22 @@ func AllTodos(db *sql.DB) []*Todo {
 
 	return todos
 }
+
+func AddTodo(db *sql.DB) *Todo {
+	// add sample todo for now
+	result, err := db.Exec("INSERT INTO todo (title, content) VALUES ($1, $2)", "Test Title", "Some test content")
+	if err != nil {
+		panic(err.Error())
+	}
+	id64, err := result.LastInsertId()
+	id := int(id64)
+
+	return GetTodo(db, id)
+}
+
+func GetTodo(db *sql.DB, id int) *Todo {
+	todo := &Todo{Id: id}
+	row := db.QueryRow("SELECT title, content FROM todo WHERE id=$1", id)
+	row.Scan(&todo.Title, &todo.Content)
+	return todo
+}

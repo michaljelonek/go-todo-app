@@ -34,6 +34,7 @@ func (a *App) initRouters() {
 	a.Router.HandleFunc("/", handlers.Healthcheck).Methods("Get")
 	a.Router.HandleFunc("/health", handlers.Healthcheck).Methods("Get")
 	a.Router.HandleFunc("/todo", a.listTodos).Methods("Get")
+	a.Router.HandleFunc("/todo/add", a.addTodo).Methods("Post")
 }
 
 func (a *App) Run(port string) {
@@ -44,4 +45,8 @@ func (a *App) Run(port string) {
 
 func (a *App) listTodos(w http.ResponseWriter, r *http.Request) {
 	handlers.ListTodos(a.DB, w, r)
+}
+
+func (a *App) addTodo(w http.ResponseWriter, r *http.Request) {
+	handlers.AddTodo(a.DB, w, r)
 }
