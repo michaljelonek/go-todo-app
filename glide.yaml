@@ -1,0 +1,7 @@
+package: github.com/mjelonek92/go-todo-app
+import:
+- package: github.com/gorilla/handlers
+  version: ^1.3.0
+- package: github.com/gorilla/mux
+  version: ^1.6.1
+- package: github.com/lib/pq
