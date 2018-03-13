@@ -22,7 +22,7 @@ RESTful API for simple todo application written in Go.
 Download this project
 ```bash
 go get github.com/mjelonek92/go-todo-app
-cd $GOPATH/github.com/mjelonek92/go-todo-app
+cd $GOPATH/src/github.com/mjelonek92/go-todo-app
 ```
 
 Install requirements using [glide](https://github.com/Masterminds/glide)
