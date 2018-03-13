@@ -32,14 +32,14 @@ glide install
 
 Create user and database
 ```bash
-psql -c "CREATE USER tododb WITH PASSWORD `tododb`"
+psql -c "CREATE USER tododb WITH PASSWORD 'tododb'"
 psql -c "ALTER USER tododb CREATEDB"
 psql -c "CREATE DATABASE tododb WITH OWNER tododb"
 ```
 
 Run SQL to create tables and relations.
 ```bash
-psql -U tododb -f app/models/sql/*
+psql -Utododb -dtododb -h127.0.0.1 -f app/models/sql/*
 ```
 
 Build and run
