@@ -1,7 +1,5 @@
 package models
 
-import "database/sql"
-
 type Todo struct {
 	Id       int
 	Title    string
@@ -34,21 +32,25 @@ func (db *DB) AllTodos() ([]*Todo, error) {
 	return todos, nil
 }
 
-func AddTodo(db *sql.DB) *Todo {
+func (db *DB) AddTodo() (*Todo, error) {
+	title, content := "Title", "Content"
 	// add sample todo for now
-	result, err := db.Exec("INSERT INTO todo (title, content) VALUES ($1, $2)", "Test Title", "Some test content")
+	result, err := db.Exec("INSERT INTO todo (title, content) VALUES ($1, $2)", title, content)
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 	id64, err := result.LastInsertId()
 	id := int(id64)
 
-	return GetTodo(db, id)
+	return &Todo{Id: id, Title: title, Content: content}, nil
 }
 
-func GetTodo(db *sql.DB, id int) *Todo {
-	todo := &Todo{Id: id}
-	row := db.QueryRow("SELECT title, content FROM todo WHERE id=$1", id)
-	row.Scan(&todo.Title, &todo.Content)
-	return todo
+func (db *DB) GetTodo(id int) (*Todo, error) {
+	todo := Todo{}
+	row := db.QueryRow("SELECT id, title, content FROM todo WHERE id=$1", id)
+	if err := row.Scan(&todo.Id, &todo.Title, &todo.Content); err != nil {
+		return nil, nil
+	}
+
+	return &todo, nil
 }

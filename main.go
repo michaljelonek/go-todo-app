@@ -8,6 +8,5 @@ import (
 func main() {
 	config := config.GetConf()
 	app := &app.App{}
-	app.Init(config)
-	app.Run(":8080")
+	app.Start(config)
 }

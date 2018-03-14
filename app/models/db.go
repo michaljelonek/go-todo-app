@@ -9,6 +9,8 @@ import (
 
 type Datastore interface {
 	AllTodos() ([]*Todo, error)
+	AddTodo() (*Todo, error)
+	GetTodo(int) (*Todo, error)
 }
 
 type DB struct {
