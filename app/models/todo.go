@@ -17,21 +17,21 @@ func (t *Todo) MarkUnfished() {
 	t.Finished = false
 }
 
-func AllTodos(db *sql.DB) []*Todo {
-	var todos []*Todo
-
+func (db *DB) AllTodos() ([]*Todo, error) {
 	rows, err := db.Query("SELECT id, title, content FROM todo")
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 	defer rows.Close()
+
+	todos := make([]*Todo, 0)
 	for rows.Next() {
 		todo := &Todo{}
 		rows.Scan(&todo.Id, &todo.Title, &todo.Content)
 		todos = append(todos, todo)
 	}
 
-	return todos
+	return todos, nil
 }
 
 func AddTodo(db *sql.DB) *Todo {
