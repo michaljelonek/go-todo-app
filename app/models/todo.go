@@ -2,9 +2,9 @@ package models
 
 type Todo struct {
 	Id       int
-	Title    string
-	Content  string
-	Finished bool
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	Finished bool   `json:"finished"`
 }
 
 func (t *Todo) MarkFinished() {
@@ -32,17 +32,19 @@ func (db *DB) AllTodos() ([]*Todo, error) {
 	return todos, nil
 }
 
-func (db *DB) AddTodo() (*Todo, error) {
-	title, content := "Title", "Content"
-	// add sample todo for now
-	result, err := db.Exec("INSERT INTO todo (title, content) VALUES ($1, $2)", title, content)
+func (db *DB) AddTodo(title, content string) (*Todo, error) {
+	stmt, err := db.Prepare("INSERT INTO todo (title, content) VALUES ($1, $2) RETURNING id")
 	if err != nil {
 		return nil, err
 	}
-	id64, err := result.LastInsertId()
-	id := int(id64)
+	defer stmt.Close()
 
-	return &Todo{Id: id, Title: title, Content: content}, nil
+	var id int
+	if err = stmt.QueryRow(title, content).Scan(&id); err != nil {
+		return nil, err
+	}
+
+	return db.GetTodo(id)
 }
 
 func (db *DB) GetTodo(id int) (*Todo, error) {

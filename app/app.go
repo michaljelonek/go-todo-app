@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
@@ -54,7 +55,21 @@ func (app *App) listTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) addTodo(w http.ResponseWriter, r *http.Request) {
-	todo, err := app.db.AddTodo()
+	todo := &models.Todo{}
+
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&todo); err != nil {
+		utils.BadRequest(w, "payload is required")
+		return
+	}
+	defer r.Body.Close()
+
+	if todo.Title == "" {
+		utils.BadRequest(w, "title is required")
+		return
+	}
+
+	todo, err := app.db.AddTodo(todo.Title, todo.Content)
 	if err != nil {
 		utils.ServerError(w)
 		return
