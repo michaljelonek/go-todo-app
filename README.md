@@ -18,7 +18,15 @@ RESTful API for simple todo application written in Go.
 └── main.go
 ```
 
-## Instalatation
+## Instalation
+
+### Docker Compose
+```
+docker-compose up
+```
+Server should be running on `localhost:8000`, with hot reloading on.
+
+### Locally
 Download this project
 ```bash
 go get github.com/mjelonek92/go-todo-app
@@ -47,3 +55,4 @@ Build and run
 go build
 ./go-todo-app
 ```
+Server should be running on `localhost:8000`.
