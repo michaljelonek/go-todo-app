@@ -5,11 +5,9 @@ services:
     volumes:
       - .:/go/src/github.com/mjelonek92/go-todo-app
     working_dir: /go/src/github.com/mjelonek92/go-todo-app
-    command: fresh
+    command: ["./wait-for", "db:5432", "--", "fresh"]
     environment: 
       - TODO_DB_HOST=db
-    links:
-      - db
     ports:
       - 8000:8080
   db:
@@ -22,4 +20,4 @@ services:
       - 5432:5432
     volumes:
       - ./app/models/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./postgres-data:/var/lib/postgresql/data
+      - /tmp/postgres-data:/var/lib/postgresql/data
